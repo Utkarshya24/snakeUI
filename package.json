@@ -1,15 +1,23 @@
 {
   "name": "utkarshya24-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": false,
   "description": "A customizable and dynamic UI component library built with React and TailwindCSS.",
   "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "tsc",
-    "start": "next start",
-    "lint": "next lint"
+    "build": "tsup index.ts --dts --format esm,cjs",
+    "start": "next start"
   },
   "publishConfig": {
     "access": "public"
@@ -37,6 +45,7 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",
     "tailwindcss": "^4",
+    "tsup": "^8.4.0",
     "typescript": "^5.8.3"
   },
   "keywords": [
