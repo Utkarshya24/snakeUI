@@ -1,0 +1,49 @@
+{
+  "name": "utkarshya24-ui",
+  "version": "1.0.2",
+  "private": false,
+  "description": "A customizable and dynamic UI component library built with React and TailwindCSS.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "tsc",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "utkarshya24-ui": "^1.0.0"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@rollup/plugin-typescript": "^12.1.2",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20.17.31",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "rollup": "^2.79.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tailwindcss": "^4",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "react",
+    "tailwindcss",
+    "ui",
+    "button",
+    "component"
+  ]
+}
