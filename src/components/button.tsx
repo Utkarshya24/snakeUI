@@ -1,4 +1,5 @@
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface ButtonProps {
   varient?: "default" | "error" | "outline"
@@ -8,46 +9,67 @@ interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; 
   disabled?: boolean;
   loading?: React.ReactNode
+  width?: string;
+  height?: string;
+  size?: "small" | "medium" | "large"
 }
 
 const Button: React.FC<ButtonProps> = ({
   varient = "default",
   className = '',
-  children,
+  children = "Button",
   style,
   onClick,
   disabled = false,
   loading = false,
+  width,
+  height,
+  size = "medium"
 }) => {
 
   const baseStyles = `
-    flex flex-row items-center justify-center gap-2 px-4 py-2 transition-colors duration-200 text-xl
+    flex items-center justify-center gap-2 p-0 m-0 transition-colors duration-200 text-xl px-4 py-4
     ${disabled ? 'opacity-50' : 'cursor-pointer hover:outline-none hover:ring-2 hover:ring-offset-2'}
   `;
 
   const varientStyle = {
     default:`
-      text-slate
-      bg-accent
+      text-primary-text
+      bg-secondary
       ${disabled ? 'bg-gray-400' : "hover:bg-primary hover:ring-primary"}
     `,
     error:`
-      bg-red-600
+      text-blue-500
+      bg-red-500
       ${disabled ? 'bg-gray-400' : 'hover:bg-red-700 hover:ring-red-700'}
     `,
     outline: `
-      text-primary
-      bg-accent/20
+      text-secondary
+      bg-transparent
       outline-2
-      outline-accent
+      outline-secondary
       ${disabled ? '' : 'hover:outline-primary'}
     `
   }
 
+  const sizeStyle = {
+    small : `
+      px-3 text-sm 
+    `,
+    medium: `
+      px-4 text-base
+    `,
+    large: `
+      px-6 text-lg
+    `,
+  }
+
+  const customWidthClass = width ? `` : 'w-auto max-w-max';
+
   return (
     <button
-      className={`${baseStyles} ${varientStyle[varient]} ${className}`}
-      style={style}
+      className={twMerge(`${baseStyles} ${customWidthClass} ${sizeStyle[size]} ${varientStyle[varient]} ${className}`)}
+      style={{...style, width, height}}
       onClick={onClick}
       disabled={disabled}
     >

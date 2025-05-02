@@ -9,8 +9,8 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: #16A34A;
-  --color-accent: #4ADE80;
-  --color-slate: #1E293B;
+  --color-secondary: #4ADE80;
+  --color-primary-text: #1E293B;
   --font-default: 
   --font-exo2: var(--font-exo2-sans);
   
