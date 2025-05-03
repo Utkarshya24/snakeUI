@@ -1,11 +1,11 @@
 import Button from "./Button";
-import IconButton from "./IconButton";
 import Tooltip from "./Tooltip";
 import Hamburger from "./Hamburger";
+import ToogleSwitch from "./ToogleSwitch"
 
 export {
     Button,
-    IconButton,
     Tooltip,
     Hamburger,
+    ToogleSwitch,
 }
