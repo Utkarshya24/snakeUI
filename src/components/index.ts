@@ -1,11 +1,9 @@
-import Button from "./Button";
-import IconButton from "./IconButton";
+import Button from "./button";
 import Tooltip from "./Tooltip";
 import Hamburger from "./Hamburger";
 
 export {
     Button,
-    IconButton,
     Tooltip,
     Hamburger,
 }

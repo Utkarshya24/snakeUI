@@ -1,7 +1,18 @@
-import {Button,Tooltip, Hamburger} from '../components/index'
+import {Tooltip, Hamburger} from '../components/index'
+import {
+  SnakeTable,
+  SnakeTableHead,
+  SnakeTableBody,
+  SnakeTableRow,
+  SnakeTableCell,
+} from '../components/table/Table';
+
 
 export default function Home() {
-
+  const users = [
+    { name: 'Dhruvaraj', email: 'dhruv@example.com' },
+    { name: 'Ankit', email: 'ankit@example.com' },
+  ];
   
   return ( 
     <div className="flex flex-col justify-center items-center gap-4 mt-60">
@@ -27,6 +38,26 @@ export default function Home() {
       >
         f
       </Tooltip>
+
+    <SnakeTable className="my-4 border border-gray-200 rounded-lg">
+      <SnakeTableHead>
+        <SnakeTableRow>
+          <SnakeTableCell as="th">Name</SnakeTableCell>
+          <SnakeTableCell as="th">Email</SnakeTableCell>
+        </SnakeTableRow>
+      </SnakeTableHead>
+
+      <SnakeTableBody>
+        {users.map((user, index) => (
+          <SnakeTableRow key={index}>
+            <SnakeTableCell>{user.name}</SnakeTableCell>
+            <SnakeTableCell>{user.email}</SnakeTableCell>
+          </SnakeTableRow>
+        ))}
+      </SnakeTableBody>
+    </SnakeTable>
+  
+
 
       {/* <Button size='small' width='300px'>
         Click Me
