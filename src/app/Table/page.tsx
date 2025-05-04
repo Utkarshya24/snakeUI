@@ -9,7 +9,7 @@ import {
 import { tableVariants } from '../../components/table/SnakeTable';
   
   const DemoTable = ({ variant }: { variant: keyof typeof tableVariants }) => (
-    <div className="mb-10">
+    <div className="mb-10 px-20">
       <h2 className="text-xl font-semibold capitalize mb-4">{String(variant)} Table</h2>
       <SnakeTable variant={variant}>
         <SnakeTableHead >
