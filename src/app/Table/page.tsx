@@ -5,8 +5,8 @@ import {
     SnakeTableBody,
     SnakeTableRow,
     SnakeTableCell,
-  } from '../../components/table/Table';
-import { tableVariants } from '../../components/table/variants';
+  } from '../../components/table/SnakeTable';
+import { tableVariants } from '../../components/table/SnakeTable';
   
   const DemoTable = ({ variant }: { variant: keyof typeof tableVariants }) => (
     <div className="mb-10">

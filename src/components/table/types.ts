@@ -9,15 +9,15 @@ interface BaseProps {
 
   /** Component children (typically table content) */
   children: React.ReactNode;
-
-  /** varients */
-  variant?:  keyof typeof import('./variants').tableVariants;
 }
 
 /**
  * Props for <SnakeTable />
  */
-export interface SnakeTableProps extends BaseProps {}
+export interface SnakeTableProps extends BaseProps {
+  /** Variant of the table */
+  variant?: keyof typeof import('./variants').tableVariants;
+}
 
 /**
  * Props for <SnakeTableHead />
@@ -32,7 +32,9 @@ export interface SnakeBodyProps extends BaseProps {}
 /**
  * Props for <SnakeTableRow />
  */
-export interface SnakeRowProps extends BaseProps {}
+export interface SnakeRowProps extends BaseProps {
+  variant?:  keyof typeof import('./variants').rowVariants;
+}
 
 /**
  * Props for <SnakeTableCell />
@@ -40,4 +42,5 @@ export interface SnakeRowProps extends BaseProps {}
 export interface SnakeCellProps extends BaseProps {
   /** Tag to render as: 'td' | 'th' */
   as?: 'td' | 'th';
+  variant?:  keyof typeof import('./variants').cellVariants;
 }
