@@ -1,4 +1,5 @@
 import {Tooltip, Hamburger} from '../components/index'
+import SnakeUiButton from '../components/latest/SnakeUiButton';
 import {
   SnakeTable,
   SnakeTableHead,
@@ -38,6 +39,8 @@ export default function Home() {
       >
         f
       </Tooltip>
+
+      <SnakeUiButton />
 
     <SnakeTable className="my-4 border border-gray-200 rounded-lg">
       <SnakeTableHead>
