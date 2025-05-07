@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Exo_2 } from "next/font/google";
 import "./globals.css";
+import Navbar from "../components/Navbar";
 
 const Exo2 = Exo_2({
   variable: "--font-exo2-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body
         className={`${Exo2.variable} antialiased`}
       >
+        <Navbar/>
         {children}
       </body>
     </html>

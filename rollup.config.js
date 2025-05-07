@@ -4,7 +4,7 @@ import { terser } from 'rollup-plugin-terser';
 import typescript from '@rollup/plugin-typescript'; // Add this import
 
 export default {
-  input: 'src/app/page.tsx',  // Entry point for your components
+  input: './index.ts',  // Entry point for your components
   output: [
     {
       file: 'dist/index.js',

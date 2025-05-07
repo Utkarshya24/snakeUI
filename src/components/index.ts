@@ -1,4 +1,4 @@
-import Button from "./Button";
+import Button from "./button";
 import Tooltip from "./Tooltip";
 import Hamburger from "./Hamburger";
 import ToogleSwitch from "./ToogleSwitch"
