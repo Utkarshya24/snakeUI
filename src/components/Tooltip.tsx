@@ -5,7 +5,7 @@ import { twMerge } from 'tailwind-merge'
 
 interface TooltipProps {
     varient?: "default" | "outline"
-    tooltipPosition?: "top" | "bottom" | "right" | "left"
+    tooltipPosition?: "top" | "bottom" | "right" | "left";
     className?: string;
     iconClassName?: string;
     tooltipContainerClassName?: string;

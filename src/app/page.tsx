@@ -1,10 +1,13 @@
-import {Button,Tooltip, Hamburger, ToogleSwitch} from '../components/index'
+import {Button,Tooltip, Hamburger, ToogleSwitch, Grid, SnakeTransferList} from '../components/index'
 
 export default function Home() {
 
   
   return ( 
     <div className="flex flex-col justify-center items-center gap-4 mt-60">
+
+      <SnakeTransferList />
+
       {/* <p className='text-[18px]'>Test UI Library</p> */}
 
       {/* <Hamburger 
@@ -38,7 +41,7 @@ export default function Home() {
         Click Me
       </Button> */}
 
-      <ToogleSwitch />
+      {/* <ToogleSwitch /> */}
     </div>
   );
 }
