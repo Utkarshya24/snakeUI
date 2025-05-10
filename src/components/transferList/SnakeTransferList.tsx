@@ -1,134 +1,167 @@
 "use client"
 
-import React, {useEffect, useState} from 'react'
-import { MdCheckBoxOutlineBlank } from "react-icons/md";
-import { IoIosCheckbox } from "react-icons/io";
+import { useState, ReactNode } from 'react';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
-import Button from '../Button';
+import Button from '../button';
 
-interface baseProps {
-    className?: string;
-    children?: React.ReactNode;
-}
-interface listProps {
-    className?: string;
-    children: React.ReactNode[];
-    onSelectionChange?: (selectedItems: any[]) => void;
-}
+type TransferItem = {
+    id: string | number;
+    content: ReactNode;
+};
 
-interface listWraperProps {
-    slot: "left" | "right",
-    children: React.ReactNode[],
-}
+type TransferListProps = {
+    initialLeft: TransferItem[];
+    initialRight: TransferItem[];
+    gridClassName?: string;
+    buttonClassName?: string;
+    listClassName?: string;
+    listContainerClassName?: string;
+    buttonContainerClassName?: string;
+    listCheckBoxClassName?: string;
+};
 
 const base = {
-    grid: `w-[250px] h-auto bg-secondary text-primary-text px-2 py-4`,
-    listContainer: `text-xl flex flex-col gap-2`,
-    snakeTransferList: `flex justify-center items-center gap-8`,
-    button: `py-2 px-6`,
+    grid: `flex items-center justify-center space-x-4 p-4 bg-primary/50 text-primary-text`,
+    buttonContainer: `flex flex-col gap-2`,
+    button: `py-1 px-6`,
+    listContainer: `bg-secondary p-4 w-56`,
+    list: `flex items-center cursor-pointer hover:bg-primary px-2`,
+    listCheckBox: `mr-2 border-2 border-gray-300 rounded-md`
 }
 
-const buttonArray = [
-    <MdKeyboardDoubleArrowRight />,
-    <MdKeyboardArrowRight />,
-    <MdKeyboardArrowLeft />,
-    <MdKeyboardDoubleArrowLeft />,
-]
+export default function SnakeTransferList({
+    initialLeft, 
+    initialRight,
+    gridClassName = '', 
+    buttonClassName = '',
+    listClassName = '',
+    listContainerClassName = '',
+    buttonContainerClassName = '',
+    listCheckBoxClassName = ''
+    }: TransferListProps) {
+    const [leftItems, setLeftItems] = useState<TransferItem[]>(initialLeft);
+    const [rightItems, setRightItems] = useState<TransferItem[]>(initialRight);
+    const [selectedLeft, setSelectedLeft] = useState<(string | number)[]>([]);
+    const [selectedRight, setSelectedRight] = useState<(string | number)[]>([]);
 
+    const handleToggle = (id: string | number, side: 'left' | 'right') => {
+        const toggle = (selected: (string | number)[], id: string | number) =>
+        selected.includes(id) ? selected.filter(i => i !== id) : [...selected, id];
 
-export const SnakeTransferList: React.FC<baseProps> = ({className, children}) => {
+        if (side === 'left') setSelectedLeft(toggle(selectedLeft, id));
+        else setSelectedRight(toggle(selectedRight, id));
+    };
 
-    // const [selectedFromLeft, setSelectedFromLeft] = useState<any[]>([])
-    // const [selectedFromRight, setSelectedFromRight] = useState<any[]>([])
+    const moveItems = (
+        fromItems: TransferItem[],
+        toItems: TransferItem[],
+        selected: (string | number)[],
+        setFrom: (items: TransferItem[]) => void,
+        setTo: (items: TransferItem[]) => void,
+        setSelected: (selected: (string | number)[]) => void
+    ) => {
+        const moving = fromItems.filter(item => selected.includes(item.id));
+        const remaining = fromItems.filter(item => !selected.includes(item.id));
+        setTo([...toItems, ...moving]);
+        setFrom(remaining);
+        setSelected([]);
+    };
 
-    // const handleClick = () => {
-    //     console.log("Selected from Left List:", selectedFromLeft);
-    //     console.log("Selected from Right List:", selectedFromRight);
-    // }
+    const moveAll = (
+        fromItems: TransferItem[],
+        toItems: TransferItem[],
+        setFrom: (items: TransferItem[]) => void,
+        setTo: (items: TransferItem[]) => void
+    ) => {
+        setTo([...toItems, ...fromItems]);
+        setFrom([]);
+    };
 
     return (
-        <div className={`${base.snakeTransferList} $
-        {className}`}>
-            <Grid>
-                <List
-                >
-                    {`its the 1`}
-                    {`its the 2`}
-                    {`its the 3`}
-                    {`its the 4`}
-                </List>
-            </Grid>
-
-            <div 
-                className='flex flex-col gap-2'
-            >
-                <Button className={`${base.button}`} >
-                    <MdKeyboardArrowRight />
+        <div className={`${base.grid} ${gridClassName}`}>
+            <ListBox
+                items={leftItems}
+                selected={selectedLeft}
+                onToggle={id => handleToggle(id, 'left')}
+                listClassName={`${listClassName}`}
+                listContainerClassName={`${listContainerClassName}`}
+                listCheckBoxClassName={`${listCheckBoxClassName}`}
+            />
+            <div className={`${base.buttonContainer} ${buttonContainerClassName}`}>
+                <Button 
+                    onClick={() => moveAll(leftItems, rightItems, setLeftItems, setRightItems)} 
+                    className={`${base.button} ${buttonClassName}`}>
+                        <MdKeyboardDoubleArrowRight />
+                </Button>
+                <Button 
+                    onClick={() => moveItems(leftItems, rightItems, selectedLeft, setLeftItems, setRightItems, setSelectedLeft)} 
+                    className={`${base.button} ${buttonClassName} ${buttonClassName}`}>
+                        <MdKeyboardArrowRight />
+                </Button>
+                <Button 
+                    onClick={() => moveItems(rightItems, leftItems, selectedRight, setRightItems, setLeftItems, setSelectedRight)} 
+                    className={`${base.button} ${buttonClassName}`}>
+                        <MdKeyboardArrowLeft />
+                </Button>
+                <Button 
+                    onClick={() => moveAll(rightItems, leftItems, setRightItems, setLeftItems)} 
+                    className={`${base.button} ${buttonClassName}`}>
+                        <MdKeyboardDoubleArrowLeft />
                 </Button>
             </div>
-
-            <Grid>
-                <List
-                >
-                    {`its the 1`}
-                    {`its the 2`}
-                    {`its the 3`}
-                    {`its the 4`}
-                </List>
-            </Grid>
+            <ListBox
+                items={rightItems}
+                selected={selectedRight}
+                onToggle={id => handleToggle(id, 'right')}
+                listClassName={`${listClassName}`}
+                listContainerClassName={`${listContainerClassName}`}
+                listCheckBoxClassName={`${listCheckBoxClassName}`}
+            />
         </div>
-    )
+    );
 }
 
-export const Grid: React.FC<baseProps> = ({className = '', children}) => {
+type ListBoxProps = {
+    items: TransferItem[];
+    selected: (string | number)[];
+    onToggle: (id: string | number) => void;
+    listClassName?: string;
+    listContainerClassName?: string;
+    listCheckBoxClassName?: string;
+};
+
+function ListBox({
+    items, 
+    selected, 
+    onToggle,
+    listClassName = '',
+    listContainerClassName = '',
+    listCheckBoxClassName = ''
+}: ListBoxProps) {
     return (
-    <div className={`${base.grid} ${className}`}>
-        {children}
-    </div>
-    )
-}
-
-export const ListWrapper: React.FC<listWraperProps> = ({children}) => {
-    return <>{children}</>
-}
-
-export const List: React.FC<listProps> = ({className = '', children, onSelectionChange}) => {
-
-    const [checkedItems, setCheckedItems] = useState<boolean[]>(
-        new Array(children.length).fill(false)
-    )
-
-    useEffect(() => {
-        setCheckedItems(new Array(children.length).fill(false));
-    }, [children])
-
-    useEffect(() => {
-        if(onSelectionChange) {
-            const selectedItems = children.filter((_, index) => checkedItems[index]);
-            onSelectionChange(selectedItems)
-        }
-    }, [checkedItems])
-
-    const toggleCheck = (index:number) => {
-        setCheckedItems(prev => prev.map((val, i) => (i === index ? !val: val))
-    )}
-
-    return (
-            <ul className={`${base.listContainer} ${className}`}>
-                {children.map((item, index) => (
-                    <div 
-                        className='flex justify-center items-center gap-4 cursor-pointer w-full  hover:bg-primary'
-                        onClick={() => toggleCheck(index)}
-                        key={index}
-                    >
-                        {checkedItems[index] ? <IoIosCheckbox /> : <MdCheckBoxOutlineBlank /> }
-                        <li>{item}</li>
-                    </div>
+        <div className={`${base.listContainer} ${listContainerClassName}`}>
+            {items.length === 0 && <div className="text-center">No items</div>}
+                {items.map(item => (
+                <div 
+                    key={item.id} 
+                    className={`${base.list} ${listClassName}`}
+                    onClick={() => onToggle(item.id)}
+                >
+                    <input
+                        type="checkbox"
+                        checked={selected.includes(item.id)}
+                        className={`${base.listCheckBox} ${listCheckBoxClassName}`}
+                        onChange={() => onToggle(item.id)}
+                    />
+                    <span>
+                        {item.content}
+                    </span>
+                </div>
                 ))}
-            </ul>
-    )
+        </div>
+    );
 }
