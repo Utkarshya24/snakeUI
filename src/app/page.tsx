@@ -1,4 +1,4 @@
-import {Tooltip, Hamburger, ToogleSwitch, SnakeTransferList} from '../components/index'
+import {Tooltip, Hamburger, ToogleSwitch, SnakeTransferList, SnakeSlider} from '../components/index'
 import SnakeUiButton from '../components/latest/SnakeUiButton';
 import {
   SnakeTable,
@@ -18,7 +18,9 @@ export default function Home() {
   return ( 
     <div className="flex flex-col justify-center items-center gap-4 mt-60">
 
-      <SnakeTransferList
+      <SnakeSlider />
+
+      {/* <SnakeTransferList
         initialLeft={[
           {id:1, content: <span>Apple</span> },
           {id:2, content: <span>Banana</span> },
@@ -31,7 +33,7 @@ export default function Home() {
           {id:7,content: <span>Grapes1</span> },
           {id:8,content: <span>Watermelon2</span> },
         ]}
-      />
+      /> */}
 
       {/* <ToogleSwitch
         enableIconSwitch
