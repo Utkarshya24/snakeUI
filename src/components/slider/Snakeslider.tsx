@@ -3,35 +3,43 @@
 import React, { FC, useState, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { FaVolumeDown, FaVolumeUp } from 'react-icons/fa';
-import { SnakeIconProps, SnakeInputProps, SnakeSliderProps, SnakeTickProps } from './types';
-import { sizeVariants } from './variants';
+import { SnakeIconProps, SnakeInputProps, SnakeSliderProps, SnakeTickProps, TooltipProps } from './types';
+import { sizeVariants, tooltipVariants } from './variants';
+import { RiDropFill } from 'react-icons/ri';
 
 const base = {
   SnakeSliderStyle: `flex items-center gap-2`,
   inputContainerStyle: `relative w-64 h-4`,
-  inputStyle: `appearance-none bg-transparent absolute z-20 w-full h-4 top-0 left-0 cursor-pointer`,
+  inputStyle: `appearance-none bg-transparent absolute z-20 w-full h-4 top-0 left-0`,
   filledStyle: `absolute top-1/2 -translate-y-1/2 rounded-full h-2 z-10`,
   backgroundStyle: `absolute top-1/2 -translate-y-1/2 w-full rounded-full h-2 z-5`,
   verticalInputContainerStyle: `relative w-4 h-64 flex justify-center items-center`,
   verticalInputStyle: `appearance-none bg-transparent absolute z-20 w-64 h-4 rotate-[-90deg] origin-center cursor-pointer`,
   verticalFilledStyle: `absolute left-1/2 -translate-x-1/2 rounded-full w-2 bottom-0 z-10`,
   verticalBackgroundStyle: `absolute left-1/2 -translate-x-1/2 h-full w-2 z-5 rounded-full`,
-  disable: `bg-gray-300/60`,
+  disable: `opacity-50`,
+  tooltipBase: `absolute z-40 text-xs text-white px-2 py-1 font-bold`,
+  tooltipTop: `bottom-5`,
+  tooltipBottom: `top-5`,
 };
 
 export const SnakeSlider: FC<SnakeSliderProps> = ({
   className,
-  enableIcons = true,
-  enableSteps = true,
+  enableIcons = false,
+  enableSteps = false,
   disabled = false,
-  enableVertical= true,
+  enableVertical= false,
   size = 'small',
   SliderValue = 40,
   steps = 10,
-  variantType = 'withInput',
+  variantType = 'default',
   backgroundClass = 'bg-primary/50',
   filledClass = 'bg-secondary',
   thumbColor = "#16A34A",
+  tooltipContainer,
+  tooltipVariant,
+  tooltipPosition = "top",
+  enableTooltip = false,
 }) => {
   const [value, setValue] = useState(SliderValue);
 
@@ -59,6 +67,10 @@ export const SnakeSlider: FC<SnakeSliderProps> = ({
         filledClass={filledClass}
         thumbColor={thumbColor}
         size= {size}
+        tooltipVariant={tooltipVariant}
+        tooltipPosition={tooltipPosition}
+        enableTooltip={enableTooltip}
+        tooltipContainer={tooltipContainer}
       />
 
       {enableIcons && variantType === 'default' && (
@@ -73,6 +85,7 @@ export const SnakeSlider: FC<SnakeSliderProps> = ({
           min={0}
           max={100}
           value={value}
+          disabled={!!disabled}
           onChange={(e) => {
             const val = parseInt(e.target.value);
             if (!isNaN(val)) setValue(val);
@@ -92,9 +105,13 @@ export const SnakeInput: FC<SnakeInputProps> = ({
   disabled,
   thumbColor = '#ffffff',
   onChange,
-  enableVertical = true,
+  enableVertical = false,
   backgroundClass = 'bg-primary/50',
   filledClass = 'bg-secondary',
+  tooltipPosition = 'left',
+  tooltipVariant = 'default',
+  enableTooltip = false,
+  tooltipContainer,
 }) => {
   const [inputValue, setInputValue] = useState(value);
 
@@ -136,6 +153,7 @@ export const SnakeInput: FC<SnakeInputProps> = ({
           sizeVariants[size] [enableVertical ? "vertical" : "horizontal"],
           'pointer-events-none',
           backgroundClass,
+          disabled && base.disable,
         )}
       />
 
@@ -144,9 +162,9 @@ export const SnakeInput: FC<SnakeInputProps> = ({
         className={twMerge(
           enableVertical ? base.verticalFilledStyle : base.filledStyle,
           sizeVariants[size] [enableVertical ? "vertical" : "horizontal"],
-          disabled && base.disable,
           'pointer-events-none',
           filledClass,
+          disabled && base.disable,
         )}
         style={
           enableVertical
@@ -165,6 +183,7 @@ export const SnakeInput: FC<SnakeInputProps> = ({
         onInput={(e) => handleChange(parseInt((e.target as HTMLInputElement).value))}
         className={twMerge(
           enableVertical ? base.verticalInputStyle : base.inputStyle,
+          !disabled ? "cursor-pointer" : "",
           '[&::-webkit-slider-thumb]:appearance-none',
           '[&::-webkit-slider-thumb]:bg-white',
           '[&::-webkit-slider-thumb]:rounded-full',
@@ -174,11 +193,34 @@ export const SnakeInput: FC<SnakeInputProps> = ({
         )}
         style={{
           ['--thumb-color' as any]: thumbColor,
-          ['--thumb-shadow-color' as any]: `${thumbColor}80`,
+          ['--thumb-shadow-color' as any]: disabled ? 'transparent' : `${thumbColor}80`,
         }}
         step={steps}
         disabled={!!disabled}
       />
+
+      {/* Tooltip */}
+      {(!disabled && enableTooltip) && (
+        <div
+          className={twMerge(
+            base.tooltipBase,
+            (!enableVertical && tooltipPosition) === "top" ?  base.tooltipTop : 
+            (!enableVertical && tooltipPosition) === "bottom" ? base.tooltipBottom: "",
+            tooltipVariants[tooltipVariant],
+            enableVertical ? 'left-[-2rem] flex flex-col items-center' : '',
+            tooltipContainer,
+          )}
+          style={
+            enableVertical
+              ? { bottom: `${inputValue}%` }
+              : { left: `${inputValue}%` }
+          }
+        >
+          <Tooltip tooltipVariant={tooltipVariant}>
+            {inputValue}
+          </Tooltip>
+        </div>
+      )}
 
       {steps && (
         <div
@@ -215,3 +257,12 @@ const Tick: FC<SnakeTickProps> = ({
 }) => (
   <div className={twMerge(`w-[4px] h-1 z-20 rounded-sm`, filled ? beforeFilled : afterFilled, className)} /> 
 );
+
+const Tooltip: FC<TooltipProps> = ({
+  children,
+  className,
+}) => {
+  return (
+      <div className={className}>{children}</div>
+  );
+}

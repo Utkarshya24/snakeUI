@@ -13,6 +13,10 @@ interface BaseProps {
     beforeFilled?: string,
     afterFilled?: string,
     size?: keyof typeof import('./variants').sizeVariants
+    enableTooltip?: Boolean,
+    tooltipPosition?: 'top' | 'bottom';
+    tooltipVariant?: keyof typeof import("./variants").tooltipVariants
+    tooltipContainer?: string,
 }
 
 export interface SnakeSliderProps extends BaseProps {
@@ -33,3 +37,7 @@ export interface SnakeIconProps extends BaseProps {}
 export interface SnakeTickProps extends BaseProps {}
 
 export interface SnakeIconProps extends BaseProps {}
+
+export interface TooltipProps extends BaseProps {
+    textClass?: string,
+}

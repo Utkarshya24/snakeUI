@@ -27,12 +27,23 @@ const Navbar = () => {
         >
           Table
         </Link>
+
         <Link
           href="/card"
           className={`text-[18px] ${
             currentPath === '/card' ? 'text-primary font-bold' : 'text-gray-500'
           } hover:underline hover:text-primary transition-colors duration-300`}
-          >Cards</Link>
+        >
+            Cards
+        </Link>
+        <Link
+          href="/Slider"
+          className={`text-[18px] ${
+            currentPath === '/card' ? 'text-primary font-bold' : 'text-gray-500'
+          } hover:underline hover:text-primary transition-colors duration-300`}
+        >
+            Slider
+        </Link>
       </div>
     </div>
   );
