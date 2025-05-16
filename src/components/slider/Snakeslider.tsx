@@ -1,94 +1,158 @@
 "use client"
 
-import React, {FC, useState } from 'react'
-import { SnakeIconProps, SnakeInputProps, SnakeSliderProps, SnakeTickProps } from './types'
-import { sizeVariants } from './variants'
-import { twMerge } from 'tailwind-merge'
-import { FaVolumeDown } from "react-icons/fa";
-import { FaVolumeUp } from "react-icons/fa";
+import React, { FC, useState, useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
+import { FaVolumeDown, FaVolumeUp } from 'react-icons/fa';
+import { SnakeIconProps, SnakeInputProps, SnakeSliderProps, SnakeTickProps } from './types';
+import { sizeVariants } from './variants';
 
 const base = {
-  SnakeSliderStyle: `flex justify-items-center gap-2`,
+  SnakeSliderStyle: `flex items-center gap-2`,
   inputContainerStyle: `relative w-64 h-4`,
-  inputStyle: `absolute top-0 left-0 w-full h-4 bg-transparent appearance-none z-10`,
-  filledStyle: `absolute top-1/2 -translate-y-1/2 rounded-full bg-secondary`,
-  backgroundStyle: `absolute top-1/2 -translate-y-1/2 w-full bg-primary/60 rounded-full`,
-  thumbStyle: `bg-white`,
-  disable: `bg-gray-300/60`
-}
+  inputStyle: `appearance-none bg-transparent absolute z-20 w-full h-4 top-0 left-0 cursor-pointer`,
+  filledStyle: `absolute top-1/2 -translate-y-1/2 rounded-full h-2 z-10`,
+  backgroundStyle: `absolute top-1/2 -translate-y-1/2 w-full rounded-full h-2 z-5`,
+  verticalInputContainerStyle: `relative w-4 h-64 flex justify-center items-center`,
+  verticalInputStyle: `appearance-none bg-transparent absolute z-20 w-64 h-4 rotate-[-90deg] origin-center cursor-pointer`,
+  verticalFilledStyle: `absolute left-1/2 -translate-x-1/2 rounded-full w-2 bottom-0 z-10`,
+  verticalBackgroundStyle: `absolute left-1/2 -translate-x-1/2 h-full w-2 z-5 rounded-full`,
+  disable: `bg-gray-300/60`,
+};
 
 export const SnakeSlider: FC<SnakeSliderProps> = ({
   className,
   enableIcons = true,
   enableSteps = true,
-  disable = true,
-  variant= "medium",
-  SliderValue= 40,
-  step= 10
+  disabled = false,
+  enableVertical= true,
+  size = 'small',
+  SliderValue = 40,
+  steps = 10,
+  variantType = 'withInput',
+  backgroundClass = 'bg-primary/50',
+  filledClass = 'bg-secondary',
+  thumbColor = "#16A34A",
 }) => {
-  
+  const [value, setValue] = useState(SliderValue);
+
   return (
-    <div className={`${base.SnakeSliderStyle} ${className}`}>
-
-      {enableIcons && 
+    <div className={twMerge(base.SnakeSliderStyle, enableVertical ? "flex-col" : "" , className)}>
+      {enableIcons && variantType === 'default' && (
         <Icons>
-          <FaVolumeDown/>
+          <FaVolumeDown />
         </Icons>
-      }
+      )}
 
-      <SnakeInput 
-        value={SliderValue}
-        inputVariant= {variant}
-        disabled={disable}
-        {...(enableSteps ? { steps: step } : {})}
+      {variantType === 'withInput' && (
+        <Icons>
+          <FaVolumeDown />
+        </Icons>
+      )}
+
+      <SnakeInput
+        value={value}
+        disabled={!!disabled}
+        steps={enableSteps ? steps : undefined}
+        onChange={setValue}
+        enableVertical={enableVertical}
+        backgroundClass={backgroundClass}
+        filledClass={filledClass}
+        thumbColor={thumbColor}
+        size= {size}
       />
 
-      {enableIcons && 
+      {enableIcons && variantType === 'default' && (
         <Icons>
-          <FaVolumeUp/>
+          <FaVolumeUp />
         </Icons>
-      }
-    </div>
-  )
-}
+      )}
 
-export const SnakeInput: FC<SnakeInputProps & { inputVariant?: keyof typeof sizeVariants }> = ({
+      {variantType === 'withInput' && (
+        <input
+          type="number"
+          min={0}
+          max={100}
+          value={value}
+          onChange={(e) => {
+            const val = parseInt(e.target.value);
+            if (!isNaN(val)) setValue(val);
+          }}
+          className="w-12 text-center border-b border-white bg-transparent outline-none"
+        />
+      )}
+    </div>
+  );
+};
+
+export const SnakeInput: FC<SnakeInputProps> = ({
   className,
-  value= 40,
-  inputVariant = "small",
+  value = 40,
+  size = 'small',
   steps,
   disabled,
+  thumbColor = '#ffffff',
+  onChange,
+  enableVertical = true,
+  backgroundClass = 'bg-primary/50',
+  filledClass = 'bg-secondary',
 }) => {
-    const [inputValue, setInputValue] = useState(value)
+  const [inputValue, setInputValue] = useState(value);
 
-    const thumHeight = 
-    inputVariant === "small"
-    ? "h-4"
-    : inputVariant === "medium"
-    ? "h-6"
-    : inputVariant === "large"
-    ? "h-8"
-    : ""
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
 
-    const thumWeight = 
-    inputVariant === "small"
-    ? "w-4"
-    : inputVariant === "medium"
-    ? "w-6"
-    : inputVariant === "large"
-    ? "w-8"
-    : ""
+  const handleChange = (val: number) => {
+    if (!isNaN(val)) {
+      setInputValue(val);
+      onChange?.(val);
+    }
+  };
+
+  const getThumbClasses = (size: string) => {
+    switch (size) {
+      case 'small':
+        return '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4';
+      case 'medium':
+        return '[&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6';
+      case 'large':
+        return '[&::-webkit-slider-thumb]:h-8 [&::-webkit-slider-thumb]:w-8';
+      default:
+        return '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4';
+    }
+  };
 
   return (
-    <div className={`${base.inputContainerStyle} ${className}`}>
-
+    <div
+      className={twMerge(
+        enableVertical ? base.verticalInputContainerStyle : base.inputContainerStyle,
+        className
+      )}
+    >
       {/* Background Track */}
-      <div className={twMerge(`${base.backgroundStyle} ${sizeVariants[inputVariant]}`)} />
+      <div
+        className={twMerge(
+          enableVertical ? base.verticalBackgroundStyle : base.backgroundStyle,
+          sizeVariants[size] [enableVertical ? "vertical" : "horizontal"],
+          'pointer-events-none',
+          backgroundClass,
+        )}
+      />
 
       {/* Filled Track */}
       <div
-        className={twMerge(`${base.filledStyle} ${disabled && base.disable} ${sizeVariants[inputVariant]}`)}
-        style={{ width: `${inputValue}%` }}
+        className={twMerge(
+          enableVertical ? base.verticalFilledStyle : base.filledStyle,
+          sizeVariants[size] [enableVertical ? "vertical" : "horizontal"],
+          disabled && base.disable,
+          'pointer-events-none',
+          filledClass,
+        )}
+        style={
+          enableVertical
+            ? { height: `${inputValue}%` }
+            : { width: `${inputValue}%` }
+        }
       />
 
       {/* Slider Input */}
@@ -97,54 +161,57 @@ export const SnakeInput: FC<SnakeInputProps & { inputVariant?: keyof typeof size
         min={0}
         max={100}
         value={inputValue}
-        onChange={(e) => setInputValue(parseInt(e.target.value))}
-        className={`
-          ${base.inputStyle}
-          [&::-webkit-slider-thumb]:appearance-none
-          [&::-webkit-slider-thumb]:rounded-full
-          [&::-webkit-slider-thumb]:${thumHeight}
-          [&::-webkit-slider-thumb]:${thumWeight}
-          [&::-webkit-slider-thumb]:${base.thumbStyle}
-        `}
+        onChange={(e) => handleChange(parseInt(e.target.value))}
+        onInput={(e) => handleChange(parseInt((e.target as HTMLInputElement).value))}
+        className={twMerge(
+          enableVertical ? base.verticalInputStyle : base.inputStyle,
+          '[&::-webkit-slider-thumb]:appearance-none',
+          '[&::-webkit-slider-thumb]:bg-white',
+          '[&::-webkit-slider-thumb]:rounded-full',
+          '[&::-moz-range-thumb]:rounded-full',
+          getThumbClasses(size),
+          "custom-thumb z-30"
+        )}
+        style={{
+          ['--thumb-color' as any]: thumbColor,
+          ['--thumb-shadow-color' as any]: `${thumbColor}80`,
+        }}
         step={steps}
         disabled={!!disabled}
       />
 
-      <div className="absolute top-1/2 w-full flex justify-between -translate-y-1/2 pointer-events-none">
-        {Array.from({length: Math.floor(100 / steps) + 1}).map((_, i) => {
-          
-          const tickValue = i * steps;
-          const isFilled = tickValue <= inputValue;
-          
-          return (
-            <Tick filled={isFilled} key={i}/>
-          )
-        })}
-      </div>
-      
+      {steps && (
+        <div
+          className={twMerge(
+            `absolute pointer-events-none z-20`,
+            enableVertical
+              ? 'left-1/2 bottom-0 h-full flex flex-col-reverse justify-between -translate-x-1/2'
+              : 'top-1/2 w-full flex justify-between -translate-y-1/2'
+            )}
+        >
+          {Array.from({ length: Math.floor(100 / Number(steps)) + 1 }).map((_, i) => {
+            const tickValue = i * Number(steps);
+            const isFilled = tickValue <= inputValue;
+            return <Tick filled={isFilled} key={i} />;
+          })}
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-const Icons: FC<SnakeIconProps> = ({
-  className,
-  children,
+const Icons: FC<SnakeIconProps> = ({ 
+  className, 
+  children 
 }) => {
+  return <div className={className}>{children}</div>;
+};
 
-  return (
-    <div className={`${className}`}>
-      {children}
-    </div>
-  )
-}
-
-const Tick: FC<SnakeTickProps> = ({
-  className,
-  filled,
-  beforeFilled = "bg-gray-700",
-  afterFilled = "bg-gray-300",
+const Tick: FC<SnakeTickProps> = ({ 
+  className, 
+  filled, 
+  beforeFilled = 'bg-black', 
+  afterFilled = 'bg-white' 
 }) => (
-    <div
-      className={`w-[2px] h-1 ${filled ? beforeFilled : afterFilled} ${className}`}
-    />
-)
+  <div className={twMerge(`w-[4px] h-1 z-20 rounded-sm`, filled ? beforeFilled : afterFilled, className)} /> 
+);

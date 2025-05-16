@@ -3,29 +3,33 @@ import React from 'react'
 interface BaseProps {
     className?: string,
     children?: React.ReactNode,
+    backgroundClass?: string,
+    filledClass?: string,
+    thumbColor?: string,
+    steps?: number,
+    disabled?: Boolean,
+    enableVertical?: Boolean,
+    filled?: any,
+    beforeFilled?: string,
+    afterFilled?: string,
+    size?: keyof typeof import('./variants').sizeVariants
 }
 
 export interface SnakeSliderProps extends BaseProps {
     enableIcons?: Boolean,
     enableSteps?: Boolean,
-    disable?: Boolean,
-    SliderValue?: any,
-    step?: number,
-    variant?: keyof typeof import('./variants').sizeVariants
+    SliderValue?: number,
+    variantType?: "default" | "withInput",
+    
 }
 
 export interface SnakeInputProps extends BaseProps {
     value?: number,
-    inputVariant?: string,
-    steps?: any,
-    disabled?: Boolean,
-    variant?: keyof typeof import('./variants').sizeVariants
+    onChange?: (val: number) => void,
 }
 
 export interface SnakeIconProps extends BaseProps {}
 
-export interface SnakeTickProps extends BaseProps {
-    filled?: any,
-    beforeFilled?: string,
-    afterFilled?: string,
-}
+export interface SnakeTickProps extends BaseProps {}
+
+export interface SnakeIconProps extends BaseProps {}

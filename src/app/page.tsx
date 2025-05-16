@@ -16,7 +16,7 @@ export default function Home() {
   ];
   
   return ( 
-    <div className="flex flex-col justify-center items-center gap-4 mt-60">
+    <div className="flex flex-col justify-center items-center gap-20 mt-60">
 
       <SnakeSlider />
 
@@ -35,10 +35,10 @@ export default function Home() {
         ]}
       /> */}
 
-      {/* <ToogleSwitch
+      <ToogleSwitch
         enableIconSwitch
         enableCheckmark
-      /> */}
+      />
 
       {/* <SnakeTransferList /> */}
 
