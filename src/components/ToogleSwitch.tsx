@@ -51,10 +51,10 @@ const ToggleSwitch: React.FC<ToogleSwitchProps> = ({
 
     const buttonHeight = enableIconSwitch ? "h-8" : "h-6";
     const buttonWidth = enableIconSwitch ? "w-16" : "w-14";
-
+    
     const buttonstyle = `
         relative inline-flex ${buttonHeight} ${buttonWidth} items-center 
-        rounded-full transition-colors duration-300 
+        rounded-full transition-colors duration-300 cursor-pointer
         ${isActive && !enableIconSwitch ? "bg-secondary" : ""} 
         ${disabled ? "opacity-60 cursor-not-allowed" : ""}
     `;

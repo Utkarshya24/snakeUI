@@ -96,7 +96,6 @@ const Slider = () => {
                 <SnakeSlider 
                     enableIcons
                     enableTooltip
-                    tooltipVariant='outline'
                     enableSteps
                     steps={5}
                     tooltipContainer='bottom-10'

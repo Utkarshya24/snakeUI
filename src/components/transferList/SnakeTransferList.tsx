@@ -1,12 +1,13 @@
 "use client"
 
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, FC } from 'react';
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
 import Button from '../button';
+import { twMerge } from 'tailwind-merge';
 
 type TransferItem = {
     id: string | number;
@@ -22,15 +23,48 @@ type TransferListProps = {
     listContainerClassName?: string;
     buttonContainerClassName?: string;
     listCheckBoxClassName?: string;
+    variants?: "solid" | "outline" | "shadow" | "glowing" | "default" | "bordered" | "glass" | "hoverZoom";
+};
+
+type ListBoxProps = {
+    items: TransferItem[];
+    selected: (string | number)[];
+    onToggle: (id: string | number) => void;
+    listClassName?: string;
+    listContainerClassName?: string;
+    listCheckBoxClassName?: string;
+    variants?: "solid" | "outline" | "shadow" | "glowing" | "default" | "bordered" | "glass" | "hoverZoom";
 };
 
 const base = {
-    grid: `flex items-center justify-center space-x-4 p-4 bg-primary/50 text-primary-text`,
+    grid: `flex items-center justify-center space-x-4 p-4`,
     buttonContainer: `flex flex-col gap-2`,
     button: `py-1 px-6`,
-    listContainer: `bg-secondary p-4 w-56`,
-    list: `flex items-center cursor-pointer hover:bg-primary px-2`,
-    listCheckBox: `mr-2 border-2 border-gray-300 rounded-md`
+    listContainer: `p-4 w-56`,
+    list: `flex items-center cursor-pointer px-2`,
+    listCheckBox: `mr-2 border-2 border-gray-300 rounded-md`,
+}
+
+const variatnsStyle = {
+    default: `shadow-sm shadow-secondary/50`,
+    solid: `bg-primary/80`,
+    outline: `border border-secondary bg-secondary/20`,
+    shadow: `shadow-lg shadow-black/50 bg-secondary/40`,
+    glass: ` bg-gray-400/50 backdrop-blur-md`,
+    glowing: `shadow-[0_0_30px_rgba(74,222,128,0.9)]`,
+    bordered: `border-2 border-secondary`,
+    hoverZoom: ``
+}
+
+const variatnsListStyle = {
+    default: `hover:shadow-sm hover:shadow-secondary/50 translate-1 ease-in-out duration-200`,
+    solid: `hover:bg-secondary/50 text-primary-text translate-1 ease-in-out duration-200`,
+    outline: `hover:bg-primary/20 backdrop-blur-md translate-1 ease-in-out duration-200`,
+    shadow: `hover:shadow-sm hover:shadow-black/50 translate-1 ease-in-out duration-200`,
+    glass: ` hover:bg-white/40 hover:backdrop-blur-md hover:text-primary-text translate-1 ease-in-out duration-200`,
+    glowing: `hover:shadow-[0_0_5px_rgba(74,222,128,0.5)] translate-1 ease-in-out duration-200`,
+    bordered: `hover:border hover:border-secondary`,
+    hoverZoom: `hover:text-xl translate-1 ease-in-out duration-200`
 }
 
 export default function SnakeTransferList({
@@ -41,7 +75,8 @@ export default function SnakeTransferList({
     listClassName = '',
     listContainerClassName = '',
     buttonContainerClassName = '',
-    listCheckBoxClassName = ''
+    listCheckBoxClassName = '',
+    variants= "default",
     }: TransferListProps) {
     const [leftItems, setLeftItems] = useState<TransferItem[]>(initialLeft);
     const [rightItems, setRightItems] = useState<TransferItem[]>(initialRight);
@@ -82,7 +117,10 @@ export default function SnakeTransferList({
     };
 
     return (
-        <div className={`${base.grid} ${gridClassName}`}>
+        <div className={twMerge(
+            base.grid,
+            gridClassName,
+        )}>
             <ListBox
                 items={leftItems}
                 selected={selectedLeft}
@@ -90,6 +128,7 @@ export default function SnakeTransferList({
                 listClassName={`${listClassName}`}
                 listContainerClassName={`${listContainerClassName}`}
                 listCheckBoxClassName={`${listCheckBoxClassName}`}
+                variants={variants}
             />
             <div className={`${base.buttonContainer} ${buttonContainerClassName}`}>
                 <Button 
@@ -120,35 +159,36 @@ export default function SnakeTransferList({
                 listClassName={`${listClassName}`}
                 listContainerClassName={`${listContainerClassName}`}
                 listCheckBoxClassName={`${listCheckBoxClassName}`}
+                variants={variants}
             />
         </div>
     );
 }
 
-type ListBoxProps = {
-    items: TransferItem[];
-    selected: (string | number)[];
-    onToggle: (id: string | number) => void;
-    listClassName?: string;
-    listContainerClassName?: string;
-    listCheckBoxClassName?: string;
-};
-
-function ListBox({
+const ListBox: FC<ListBoxProps> = ({
     items, 
     selected, 
     onToggle,
     listClassName = '',
     listContainerClassName = '',
-    listCheckBoxClassName = ''
-}: ListBoxProps) {
+    listCheckBoxClassName = '',
+    variants= "outline" 
+}) => {
     return (
-        <div className={`${base.listContainer} ${listContainerClassName}`}>
+        <div className={twMerge(
+            base.listContainer,
+            variatnsStyle[variants],
+            listContainerClassName,
+        )}>
             {items.length === 0 && <div className="text-center">No items</div>}
                 {items.map(item => (
                 <div 
                     key={item.id} 
-                    className={`${base.list} ${listClassName}`}
+                    className={twMerge(
+                        base.list,
+                        variatnsListStyle[variants],
+                        listClassName,
+                    )}
                     onClick={() => onToggle(item.id)}
                 >
                     <input

@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <div className='flex justify-between items-center bg-white shadow-md p-4'>
       <Image src={"./snakeui.svg"} alt="logo" width={100} height={100} className='w-[150px] h-[50px]' />
-      <div className='flex gap-2 justify-center items-center'>
+      <div className='flex gap-4 justify-center items-center'>
         <Link
           href="/"
           className={`text-[18px] ${
@@ -43,6 +43,30 @@ const Navbar = () => {
           } hover:underline hover:text-primary transition-colors duration-300`}
         >
             Slider
+        </Link>
+        <Link
+          href="/transferList"
+          className={`text-[18px] ${
+            currentPath === '/card' ? 'text-primary font-bold' : 'text-gray-500'
+          } hover:underline hover:text-primary transition-colors duration-300`}
+        >
+            Transfer List
+        </Link>
+        <Link
+          href="/toogleSwitch"
+          className={`text-[18px] ${
+            currentPath === '/card' ? 'text-primary font-bold' : 'text-gray-500'
+          } hover:underline hover:text-primary transition-colors duration-300`}
+        >
+            Toogle 
+        </Link>
+        <Link
+          href="/alerts"
+          className={`text-[18px] ${
+            currentPath === '/card' ? 'text-primary font-bold' : 'text-gray-500'
+          } hover:underline hover:text-primary transition-colors duration-300`}
+        >
+            Alerts 
         </Link>
       </div>
     </div>

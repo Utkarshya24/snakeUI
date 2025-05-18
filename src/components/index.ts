@@ -4,6 +4,7 @@ import Hamburger from "./Hamburger";
 import ToogleSwitch from "./ToogleSwitch"
 import SnakeTransferList from "./transferList/SnakeTransferList"
 import { SnakeSlider, SnakeInput } from "./slider/Snakeslider";
+import SnakeAlert from "./alert/SnakeAlert";
 
 export {
     Button,
@@ -13,4 +14,5 @@ export {
     SnakeTransferList,
     SnakeSlider,
     SnakeInput,
+    SnakeAlert,
 }
