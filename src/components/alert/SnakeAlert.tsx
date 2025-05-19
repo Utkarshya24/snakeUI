@@ -46,24 +46,25 @@ const SnakeAlert: FC<SnakeAlertProps> = ({
                 enableShadow && baseStyles.shadow,
                 collapse ? "hidden" : ""
             )}>
-                <div className={`${enableTitle ? "flex flex-col gap-2" :""} ${labelContainerStyle}`}>
-                    <p className={twMerge(
+                <div className={`${enableTitle ? "flex flex-col " :""} ${labelContainerStyle}`}>
+                    
+                    <p className={iconStyle}>
+                        {!disableIcon ? (customIcon ? customIcon : icons[type]) : "" }
+                    </p>
+                </div>
+                <div className={`${enableTitle ? "flex flex-col " :""} ${labelContainerStyle}`}>
+                <p className={twMerge(
                         baseStyles.title,
                         titleStyle
                     )}>
                         {enableTitle ? (customTitle ? customTitle :  titles[type]) : ""}
                     </p>
-
-                    <p className={iconStyle}>
-                        {!disableIcon ? (customIcon ? customIcon : icons[type]) : "" }
-                    </p>
-                </div>
-
                 <p className={twMerge(
                     messageStyle
                 )}>
                     {children}
                 </p>
+                </div>
 
                 <button 
                     className={`${baseStyles.action} ${actionStyle}`}
